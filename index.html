@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseWire | Live News + Weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="shell">
+      <header class="topbar glass">
+        <div>
+          <p class="eyebrow">Live world briefing</p>
+          <h1>PulseWire</h1>
+        </div>
+
+        <div class="top-controls">
+          <div class="clock-wrap">
+            <p id="live-date" class="date-text">Loading date...</p>
+            <p id="live-time" class="time-text">--:--:--</p>
+          </div>
+
+          <label class="select-wrap">
+            <span>Region</span>
+            <select id="region-select">
+              <option value="us">United States</option>
+              <option value="in">India</option>
+              <option value="cn">China</option>
+              <option value="eu">Europe</option>
+            </select>
+          </label>
+
+          <label class="select-wrap hidden" id="europe-country-wrap">
+            <span>Europe country</span>
+            <select id="europe-country-select">
+              <option value="gb">United Kingdom</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+              <option value="it">Italy</option>
+              <option value="es">Spain</option>
+            </select>
+          </label>
+        </div>
+      </header>
+
+      <section class="grid">
+        <aside class="panel glass weather-panel">
+          <div class="panel-header">
+            <h2>Local Weather</h2>
+            <button id="use-location-btn" class="ghost-btn">Use Current Location</button>
+          </div>
+
+          <form id="zip-form" class="zip-form">
+            <input
+              id="zip-input"
+              type="text"
+              placeholder="US zipcode or city"
+              autocomplete="postal-code"
+            />
+            <button type="submit">Update</button>
+          </form>
+
+          <div id="weather-card" class="weather-card">
+            <p class="muted">Waiting for location...</p>
+          </div>
+
+          <p id="weather-meta" class="muted small"></p>
+
+          <div class="calendar-wrap">
+            <div class="calendar-head">
+              <button id="month-prev" aria-label="Previous month">&#8592;</button>
+              <h3 id="calendar-title">Month</h3>
+              <button id="month-next" aria-label="Next month">&#8594;</button>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+          </div>
+        </aside>
+
+        <section class="panel glass news-panel">
+          <div class="panel-header sticky">
+            <div>
+              <h2>Top Headlines</h2>
+              <p class="muted small" id="refresh-state">Live updates every 60s</p>
+            </div>
+
+            <div class="actions">
+              <div class="tabs">
+                <button class="tab active" data-tab="home">Home</button>
+                <button class="tab" data-tab="tech">Tech</button>
+                <button class="tab" data-tab="business">Business</button>
+                <button class="tab" data-tab="sports">Sports</button>
+                <button class="tab" data-tab="ipl">IPL</button>
+              </div>
+              <button id="refresh-btn" class="primary-btn">Refresh now</button>
+            </div>
+          </div>
+
+          <div id="news-list" class="news-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="news-item-template">
+      <article class="news-item glass-soft">
+        <div class="news-item-top">
+          <span class="source"></span>
+          <time class="published"></time>
+        </div>
+        <a class="headline" target="_blank" rel="noopener noreferrer"></a>
+        <p class="snippet"></p>
+      </article>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
