@@ -90,15 +90,26 @@ const TAB_FEED_CONFIG = {
   ipl: { searchQuery: "IPL OR \"Indian Premier League\"", fallbackFeed: "https://www.espncricinfo.com/rss/content/story/feeds/0.xml", statusLabel: "IPL feed" }
 };
 
+const TAB_TITLES = {
+  weather: "Local Weather",
+  home: "Top Headlines",
+  tech: "Technology News",
+  business: "Business News",
+  sports: "Sports News",
+  ipl: "IPL Briefing"
+};
+
 const $ = (selector) => document.querySelector(selector);
 
 const elements = {
   date: $("#live-date"),
   time: $("#live-time"),
+  panelTitle: $("#panel-title"),
   refreshState: $("#refresh-state"),
   regionSelect: $("#region-select"),
   euWrap: $("#europe-country-wrap"),
   euSelect: $("#europe-country-select"),
+  weatherView: $("#weather-view"),
   useLocationBtn: $("#use-location-btn"),
   zipForm: $("#zip-form"),
   zipInput: $("#zip-input"),
@@ -126,6 +137,16 @@ function activeRegionConfig() {
 
 function setRefreshText(statusText = "Live updates every 60s") {
   elements.refreshState.textContent = `${statusText} | Next in ${String(state.countdown).padStart(2, "0")}s`;
+}
+
+function isWeatherTab() {
+  return state.tab === "weather";
+}
+
+function updateTabPresentation() {
+  elements.panelTitle.textContent = TAB_TITLES[state.tab] || TAB_TITLES.home;
+  elements.weatherView.classList.toggle("hidden", !isWeatherTab());
+  elements.newsList.classList.toggle("hidden", isWeatherTab());
 }
 
 function showNewsLoading() {
@@ -543,6 +564,10 @@ function bindCalendar() {
 }
 
 async function refreshNews() {
+  if (isWeatherTab()) {
+    return;
+  }
+
   const topic = TAB_FEED_CONFIG[state.tab] ? state.tab : "home";
   const cachedItems = readNewsCache(topic);
 
@@ -579,6 +604,12 @@ async function fullRefresh() {
     return;
   }
 
+  if (isWeatherTab()) {
+    await refreshWeather();
+    setRefreshText(`Weather updated at ${new Date().toLocaleTimeString()}`);
+    return;
+  }
+
   await Promise.all([refreshNews(), refreshWeather()]);
 }
 
@@ -588,8 +619,9 @@ function bindTabSwitching() {
       elements.tabs.forEach((tab) => tab.classList.remove("active"));
       tabButton.classList.add("active");
       state.tab = tabButton.dataset.tab;
+      updateTabPresentation();
       state.countdown = REFRESH_SECONDS;
-      await refreshNews();
+      await fullRefresh();
     });
   });
 }
@@ -613,7 +645,7 @@ function bindRegionSelection() {
     localStorage.setItem("pulsewire_region", state.region);
     applyRegionVisibility();
     state.countdown = REFRESH_SECONDS;
-    await refreshNews();
+    await fullRefresh();
     startClock();
   });
 
@@ -621,7 +653,7 @@ function bindRegionSelection() {
     state.europeCountry = event.target.value;
     localStorage.setItem("pulsewire_eu_country", state.europeCountry);
     state.countdown = REFRESH_SECONDS;
-    await refreshNews();
+    await fullRefresh();
     startClock();
   });
 }
@@ -699,13 +731,14 @@ async function init() {
 
   startClock();
   renderCalendar();
+  updateTabPresentation();
   setRefreshText();
 
   if (state.region === "us") {
     elements.zipInput.value = "10001";
   }
 
-  await refreshNews();
+  await fullRefresh();
 
   if (elements.zipInput.value) {
     try {

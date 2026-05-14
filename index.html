@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PulseWire | Live News + Weather</title>
+    <title>PulseWire Pro | Live Briefing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -52,22 +52,39 @@
         </div>
       </header>
 
-      <section class="grid">
-        <aside class="panel glass weather-panel">
-          <div class="panel-header">
-            <h2>Local Weather</h2>
-            <button id="use-location-btn" class="ghost-btn">Use Current Location</button>
+      <section class="panel glass content-panel">
+        <div class="panel-header sticky">
+          <div>
+            <h2 id="panel-title">Top Headlines</h2>
+            <p class="muted small" id="refresh-state">Live updates every 60s</p>
           </div>
 
-          <form id="zip-form" class="zip-form">
-            <input
-              id="zip-input"
-              type="text"
-              placeholder="US zipcode or city"
-              autocomplete="postal-code"
-            />
-            <button type="submit">Update</button>
-          </form>
+          <div class="actions">
+            <div class="tabs" role="tablist" aria-label="Sections">
+              <button class="tab" data-tab="weather">Weather</button>
+              <button class="tab active" data-tab="home">Home</button>
+              <button class="tab" data-tab="tech">Tech</button>
+              <button class="tab" data-tab="business">Business</button>
+              <button class="tab" data-tab="sports">Sports</button>
+              <button class="tab" data-tab="ipl">IPL</button>
+            </div>
+            <button id="refresh-btn" class="primary-btn">Refresh now</button>
+          </div>
+        </div>
+
+        <section id="weather-view" class="weather-view hidden" aria-live="polite">
+          <div class="weather-top-actions">
+            <button id="use-location-btn" class="ghost-btn">Use Current Location</button>
+            <form id="zip-form" class="zip-form">
+              <input
+                id="zip-input"
+                type="text"
+                placeholder="US zipcode or city"
+                autocomplete="postal-code"
+              />
+              <button type="submit">Update</button>
+            </form>
+          </div>
 
           <div id="weather-card" class="weather-card">
             <p class="muted">Waiting for location...</p>
@@ -83,29 +100,9 @@
             </div>
             <div id="calendar-grid" class="calendar-grid"></div>
           </div>
-        </aside>
-
-        <section class="panel glass news-panel">
-          <div class="panel-header sticky">
-            <div>
-              <h2>Top Headlines</h2>
-              <p class="muted small" id="refresh-state">Live updates every 60s</p>
-            </div>
-
-            <div class="actions">
-              <div class="tabs">
-                <button class="tab active" data-tab="home">Home</button>
-                <button class="tab" data-tab="tech">Tech</button>
-                <button class="tab" data-tab="business">Business</button>
-                <button class="tab" data-tab="sports">Sports</button>
-                <button class="tab" data-tab="ipl">IPL</button>
-              </div>
-              <button id="refresh-btn" class="primary-btn">Refresh now</button>
-            </div>
-          </div>
-
-          <div id="news-list" class="news-list"></div>
         </section>
+
+        <div id="news-list" class="news-list"></div>
       </section>
     </main>
 
