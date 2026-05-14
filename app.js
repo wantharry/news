@@ -315,13 +315,18 @@ function readNewsCache(topic) {
 }
 
 function renderNews(items) {
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const visibleItems = isMobile ? items.slice(0, 4) : items;
+
   elements.newsList.innerHTML = "";
-  if (!items.length) {
+  elements.newsList.classList.toggle("compact", isMobile);
+
+  if (!visibleItems.length) {
     elements.newsList.innerHTML = `<p class="muted">No headlines right now.</p>`;
     return;
   }
 
-  items.forEach((item) => {
+  visibleItems.forEach((item) => {
     const node = elements.template.content.cloneNode(true);
     node.querySelector(".source").textContent = item.source;
 
