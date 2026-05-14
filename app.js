@@ -482,20 +482,24 @@ function startClock() {
     const now = new Date();
     const timezone = regionTimezone();
 
-    elements.date.textContent = new Intl.DateTimeFormat("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      timeZone: timezone
-    }).format(now);
+    if (elements.date) {
+      elements.date.textContent = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        timeZone: timezone
+      }).format(now);
+    }
 
-    elements.time.textContent = new Intl.DateTimeFormat("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZone: timezone
-    }).format(now);
+    if (elements.time) {
+      elements.time.textContent = new Intl.DateTimeFormat("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: timezone
+      }).format(now);
+    }
   };
 
   update();
@@ -627,7 +631,7 @@ function bindTabSwitching() {
 }
 
 function applyRegionVisibility() {
-  elements.euWrap.classList.toggle("hidden", state.region !== "eu");
+  if (elements.euWrap) elements.euWrap.classList.toggle("hidden", state.region !== "eu");
   if (state.region === "us") {
     elements.zipInput.placeholder = "US zipcode (e.g. 10001)";
   } else {
@@ -636,26 +640,30 @@ function applyRegionVisibility() {
 }
 
 function bindRegionSelection() {
-  elements.regionSelect.value = state.region;
-  elements.euSelect.value = state.europeCountry;
   applyRegionVisibility();
 
-  elements.regionSelect.addEventListener("change", async (event) => {
-    state.region = event.target.value;
-    localStorage.setItem("pulsewire_region", state.region);
-    applyRegionVisibility();
-    state.countdown = REFRESH_SECONDS;
-    await fullRefresh();
-    startClock();
-  });
+  if (elements.regionSelect) {
+    elements.regionSelect.value = state.region;
+    elements.regionSelect.addEventListener("change", async (event) => {
+      state.region = event.target.value;
+      localStorage.setItem("pulsewire_region", state.region);
+      applyRegionVisibility();
+      state.countdown = REFRESH_SECONDS;
+      await fullRefresh();
+      startClock();
+    });
+  }
 
-  elements.euSelect.addEventListener("change", async (event) => {
-    state.europeCountry = event.target.value;
-    localStorage.setItem("pulsewire_eu_country", state.europeCountry);
-    state.countdown = REFRESH_SECONDS;
-    await fullRefresh();
-    startClock();
-  });
+  if (elements.euSelect) {
+    elements.euSelect.value = state.europeCountry;
+    elements.euSelect.addEventListener("change", async (event) => {
+      state.europeCountry = event.target.value;
+      localStorage.setItem("pulsewire_eu_country", state.europeCountry);
+      state.countdown = REFRESH_SECONDS;
+      await fullRefresh();
+      startClock();
+    });
+  }
 }
 
 function bindWeatherControls() {
