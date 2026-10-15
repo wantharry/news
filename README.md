@@ -30,6 +30,39 @@ Then open:
 
 - http://localhost:8080
 
+## Docker
+
+Build the image from the project root:
+
+```bash
+docker build -t pulsewire-news:latest .
+```
+
+Run it locally:
+
+```bash
+docker run --rm -p 8080:80 pulsewire-news:latest
+```
+
+Then open:
+
+- http://localhost:8080
+
+### Push to a registry
+
+Tag the image (replace values):
+
+```bash
+docker tag pulsewire-news:latest <registry-or-username>/pulsewire-news:latest
+```
+
+Sign in and push:
+
+```bash
+docker login
+docker push <registry-or-username>/pulsewire-news:latest
+```
+
 ## Notes
 
 - Live refresh pauses while the browser tab is hidden or offline.
